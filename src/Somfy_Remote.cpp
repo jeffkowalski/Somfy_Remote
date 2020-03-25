@@ -140,7 +140,7 @@ void SomfyRemote::sendCommand(uint8_t *frame, uint8_t sync)
     ELECHOUSE_cc1101.setGDO(gdo0Pin, gdo2Pin);
 
     // Initialize radio chip
-    ELECHOUSE_cc1101.Init(PA10);
+    ELECHOUSE_cc1101.Init();
 
     // Enable transmission at 433.42 MHz
     ELECHOUSE_cc1101.SetTx(433.42);

@@ -6,7 +6,7 @@ This library is based on the Arduino sketch by Nickduino: https://github.com/Nic
 #define SOMFY_REMOTE
 
 #include <EEPROM.h>
-#include <ELECHOUSE_CC1101_RCS_DRV.h>
+#include <ELECHOUSE_CC1101_SRC_DRV.h>
 
 class SomfyRemote
 {
