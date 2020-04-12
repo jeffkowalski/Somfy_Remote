@@ -1,7 +1,7 @@
 {
   "name": "Somfy_Remote",
-  "keywords": "somfy, spi, bus, blinds, cc1101",
-  "description": "Allows to control Somfy blinds via a CC1101 module by Texas Instruments.",
+  "keywords": "somfy, spi, bus, blinds, fs1000a",
+  "description": "Allows to control Somfy blinds via a FS1000A transmitter module.",
   "repository": {
     "type": "git",
     "url": "https://github.com/EinfachArne/Somfy_Remote.git"
@@ -15,8 +15,6 @@
     }
   ],
   "dependencies": {
-    "name": "SmartRC-CC1101-Driver-Lib",
-    "version": "https://github.com/LSatan/SmartRC-CC1101-Driver-Lib"
   },
   "version": "1.0.0",
   "frameworks": "arduino",
