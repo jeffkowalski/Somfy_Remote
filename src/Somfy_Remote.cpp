@@ -6,7 +6,7 @@
 #include "Somfy_Remote.h"
 #include <EEPROM.h>
 #include <assert.h>
-#define CC1101  // comment this out to run FS1000A instead
+//#define CC1101  // comment this out to run FS1000A instead
 #ifdef CC1101
 #include <ELECHOUSE_CC1101_SRC_DRV.h>
 #define FREQ_OFFSET (-0.055)  // correction to align to 433,42MHz
@@ -14,7 +14,7 @@
 
 #define EEPROM_SIZE 64
 #define FRAME_LENGTH 7   // size of frame in bytes
-#define TRANSMIT_PIN D2  // ESP8266 pin to CC1101 GD2
+#define TRANSMIT_PIN D2  // ESP8266 pin to CC1101 GDO0
 
 
 SomfyRemote::SomfyRemote (String name, uint32_t remoteCode)
@@ -30,7 +30,7 @@ SomfyRemote::SomfyRemote (String name, uint32_t remoteCode)
 
 #ifdef CC1101
     // Choose pins before initializing radio
-    ELECHOUSE_cc1101.setGDO (D1, TRANSMIT_PIN);
+    ELECHOUSE_cc1101.setGDO (TRANSMIT_PIN, D1); // gdo0 (TX), gdo2 (unused)
 
     // Initialize radio chip
     ELECHOUSE_cc1101.Init ();
@@ -105,7 +105,7 @@ void SomfyRemote::sendCommand (uint8_t const * frame, uint8_t sync) const {
 
     // Wake-up pulse & silence, only with the first frame
     if (sync == 2)
-        pulse (HIGH, 9986, LOW, 97087);  //  (empirically determined)
+        pulse (HIGH, 9986, LOW, 97087);  // (empirically determined)
 
     // Pre-sync + Sync = 15.44ms
 
