@@ -6,16 +6,15 @@
 #include "Somfy_Remote.h"
 #include <EEPROM.h>
 #include <assert.h>
-//#define CC1101  // comment this out to run FS1000A instead
+// #define CC1101  // comment this out to run FS1000A instead
 #ifdef CC1101
-#include <ELECHOUSE_CC1101_SRC_DRV.h>
-#define FREQ_OFFSET (-0.055)  // correction to align to 433,42MHz
+    #include <ELECHOUSE_CC1101_SRC_DRV.h>
+    #define FREQ_OFFSET (-0.055)  // correction to align to 433,42MHz
 #endif
 
-#define EEPROM_SIZE 64
+#define EEPROM_SIZE  512
 #define FRAME_LENGTH 7   // size of frame in bytes
 #define TRANSMIT_PIN D2  // ESP8266 pin to CC1101 GDO0
-
 
 SomfyRemote::SomfyRemote (String name, uint32_t remoteCode)
     : _name (name)
@@ -30,10 +29,10 @@ SomfyRemote::SomfyRemote (String name, uint32_t remoteCode)
 
 #ifdef CC1101
     // Choose pins before initializing radio
-    ELECHOUSE_cc1101.setGDO (TRANSMIT_PIN, D1); // gdo0 (TX), gdo2 (unused)
+    ELECHOUSE_cc1101.setGDO (TRANSMIT_PIN, D1);  // gdo0 (TX), gdo2 (unused)
 
     // Initialize radio chip
-    ELECHOUSE_cc1101.Init ();
+    ELECHOUSE_cc1101.Init();
 
     // Enable transmission at 433.42 MHz
     ELECHOUSE_cc1101.SetTx (433.42 + FREQ_OFFSET);
@@ -42,7 +41,6 @@ SomfyRemote::SomfyRemote (String name, uint32_t remoteCode)
     pinMode (TRANSMIT_PIN, OUTPUT);
     digitalWrite (TRANSMIT_PIN, LOW);
 }
-
 
 static void printFrame (char const * message, uint8_t const * frame) {
     Serial.println (message);
@@ -54,7 +52,6 @@ static void printFrame (char const * message, uint8_t const * frame) {
     }
     Serial.println ("");
 }
-
 
 // Build frame according to Somfy RTS protocol
 void SomfyRemote::buildFrame (uint8_t * frame, uint8_t command) {
@@ -85,9 +82,8 @@ void SomfyRemote::buildFrame (uint8_t * frame, uint8_t command) {
 
     ++_rollingCode;
     EEPROM.put (_eepromAddress, _rollingCode);
-    EEPROM.commit ();
+    EEPROM.commit();
 }
-
 
 inline void pulse (int level1, int duration1, int level2, int duration2) {
     digitalWrite (TRANSMIT_PIN, level1);
@@ -95,7 +91,6 @@ inline void pulse (int level1, int duration1, int level2, int duration2) {
     digitalWrite (TRANSMIT_PIN, level2);
     delayMicroseconds (duration2);
 }
-
 
 // Send frame according to Somfy RTS protocol
 void SomfyRemote::sendCommand (uint8_t const * frame, uint8_t sync) const {
@@ -129,7 +124,6 @@ void SomfyRemote::sendCommand (uint8_t const * frame, uint8_t sync) const {
     delayMicroseconds (32286);  // Inter-frame silence (empirically determined)
 }
 
-
 // Send a command to the blinds
 void SomfyRemote::move (String command) {
     // Build frame according to selected command
@@ -139,21 +133,21 @@ void SomfyRemote::move (String command) {
     const uint8_t prog = 0x8;
     uint8_t       frame[FRAME_LENGTH];
 
-    command.toUpperCase ();
+    command.toUpperCase();
     switch (command[0]) {
-        case 'U':
-            buildFrame (frame, up);
-            break;
-        case 'D':
-            buildFrame (frame, down);
-            break;
-        case 'P':
-            buildFrame (frame, prog);
-            break;
-        case 'M':
-        default:
-            buildFrame (frame, my);
-            break;
+    case 'U':
+        buildFrame (frame, up);
+        break;
+    case 'D':
+        buildFrame (frame, down);
+        break;
+    case 'P':
+        buildFrame (frame, prog);
+        break;
+    case 'M':
+    default:
+        buildFrame (frame, my);
+        break;
     }
 
     // Send the frame according to Somfy RTS protocol
