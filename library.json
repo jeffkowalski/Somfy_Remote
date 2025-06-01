@@ -1,24 +1,28 @@
 {
   "name": "Somfy_Remote",
-  "keywords": "somfy, spi, bus, blinds, fs1000a",
+  "version": "1.1.0",
   "description": "Allows to control Somfy blinds via a FS1000A transmitter module.",
+  "keywords": "somfy, spi, bus, blinds, fs1000a",
   "repository": {
     "type": "git",
-    "url": "https://github.com/EinfachArne/Somfy_Remote.git"
+    "url": "https://github.com/jeffkowalski/Somfy_Remote.git"
   },
   "authors": [
     {
-      "name": "Arne Wulf",
-      "email": "arne-wulf@arcor.de",
-      "url": null,
+      "name": "Jeff Kowalski",
+      "email": "jeff.kowalski@gmail.com",
       "maintainer": true
     }
   ],
-  "dependencies": {
-    "name": "SmartRC-CC1101-Driver-Lib",
-    "version": "2.3.5"
-  },
-  "version": "1.0.0",
   "frameworks": "arduino",
-  "platforms": ["espressif32", "atmelavr"]
+  "platforms": ["espressif8266", "espressif32", "atmelavr"],
+  "dependencies": [
+    {
+      "name": "SmartRC-CC1101-Driver-Lib",
+      "version": "2.3.5"
+    }
+  ],
+  "build": {
+    "srcFilter": "+<src/>"
+  }
 }
