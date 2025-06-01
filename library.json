@@ -21,8 +21,5 @@
       "name": "SmartRC-CC1101-Driver-Lib",
       "version": "2.3.5"
     }
-  ],
-  "build": {
-    "srcFilter": "+<src/>"
-  }
+  ]
 }
